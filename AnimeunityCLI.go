@@ -4,13 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 
 	"AnimeunityCLI/packages/downloadurl"
 	"AnimeunityCLI/packages/getinfo"
+	"AnimeunityCLI/packages/commonresources"
 )
 
 var (
@@ -64,7 +64,7 @@ func main() {
 					},
 				},
 				Action: func(c *cli.Context) error {
-					setLogLevel()
+					setGlobalLogLevel()
 					log.WithFields(logrus.Fields{
 						"command": "quickDownload",
 						"keyword": keyword,
@@ -88,7 +88,7 @@ func main() {
 					},
 				},
 				Action: func(c *cli.Context) error {
-					setLogLevel()
+					setGlobalLogLevel()
 					log.WithFields(logrus.Fields{
 						"command": "search",
 						"keyword": keyword,
@@ -117,7 +117,7 @@ func main() {
 					},
 				},
 				Action: func(c *cli.Context) error {
-					setLogLevel()
+					setGlobalLogLevel()
 					log.WithFields(logrus.Fields{
 						"command":  "downloadURL",
 						"inputURL": inputURL,
@@ -134,29 +134,6 @@ func main() {
 	}
 }
 
-func setLogLevel() {
-	switch strings.ToLower(logLevel) {
-	case "trace":
-		log.SetLevel(logrus.TraceLevel)
-		break
-	case "debug":
-		log.SetLevel(logrus.DebugLevel)
-		break
-	case "info":
-		log.SetLevel(logrus.InfoLevel)
-		break
-	case "warn":
-		log.SetLevel(logrus.WarnLevel)
-		break
-	case "error":
-		log.SetLevel(logrus.ErrorLevel)
-		break
-	}
-	mainLog.WithField("Level", strings.ToLower(logLevel)).Debug("Log Level Set")
-	getinfo.SetLogLevel(logLevel)
-	downloadurl.SetLogLevel(logLevel)
-}
-
 func scanInput() string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
@@ -164,20 +141,20 @@ func scanInput() string {
 }
 
 func getInfo() error {
-	getinfo.PrintFullAnimeList(getinfo.GetInfo(keyword))
+	commonresources.PrintFullAnimeList(getinfo.GetInfo(keyword))
 	return nil
 }
 
 func getDownload() error {
-	animePage := downloadurl.AnimePageStruct{"", inputURL, "", []string{}, false}
+	animePage := commonresources.AnimePageStruct{"", inputURL, "", []string{}, false}
 	animePageList := downloadurl.DownloadURL(animePage, season)
-	downloadurl.PrintURLList(animePageList)
+	commonresources.PrintURLList(animePageList)
 	return nil
 }
 
 func quickDownload() error {
 	animeList := getinfo.GetInfo(keyword)
-	getinfo.PrintSmallAnimeList(animeList)
+	commonresources.PrintSmallAnimeList(animeList)
 	if len(animeList) == 0 {
 		fmt.Println("No anime found, try changing the keyword")
 		os.Exit(0)
@@ -197,10 +174,21 @@ func quickDownload() error {
 		}
 	}
 	fmt.Printf("\nAnime Found :)\n")
-	getinfo.PrintFullAnime(animeList[key])
+	commonresources.PrintFullAnime(animeList[key])
 	fmt.Printf("\nLooking for episodes\n")
-	animePage := downloadurl.AnimePageStruct{animeList[key].AnimeID, inputURL, animeList[key].Titolo, []string{}, false}
+	animePage := commonresources.AnimePageStruct{animeList[key].AnimeID, inputURL, animeList[key].Titolo, []string{}, false}
 	animePageList := downloadurl.DownloadURL(animePage, season)
-	downloadurl.PrintURLList(animePageList)
+	commonresources.PrintURLList(animePageList)
 	return nil
+}
+
+func setLogLevel() {
+	commonresources.SetLogLevel(log,logLevel)
+}
+
+func setGlobalLogLevel(){
+	setLogLevel()
+	getinfo.SetLogLevel(logLevel)
+	downloadurl.SetLogLevel(logLevel)
+
 }
