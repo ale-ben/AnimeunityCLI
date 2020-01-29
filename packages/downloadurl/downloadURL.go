@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"AnimeunityCLI/packages/commonresources"
+	"AnimeunityCLI/packages/scraper"
 )
 
 var (
@@ -35,7 +36,7 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) []com
 			url = animePage.AnimeURL
 		}
 
-		seScraper(url, strings.ToLower(season), &animePageList)
+		scraper.SeasonScraper(url, strings.ToLower(season), &animePageList)
 	} else {
 		animePageList = append(animePageList, animePage)
 	}
@@ -47,7 +48,7 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) []com
 	}
 
 	for i := 0; i < len(animePageList); i++ {
-		epScraper(&(animePageList[i]))
+		scraper.EpisodeScraper(&(animePageList[i]))
 	}
 
 	return animePageList

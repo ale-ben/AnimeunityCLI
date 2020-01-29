@@ -4,6 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"AnimeunityCLI/packages/commonresources"
+	"AnimeunityCLI/packages/scraper"
 )
 
 var (
@@ -19,7 +20,7 @@ var (
 func GetInfo(keyword string) []commonresources.AnimeStruct {
 	var animeList []commonresources.AnimeStruct
 
-	scraper(keyword, &animeList)
+	scraper.ScrapeInfo(keyword, &animeList)
 	return animeList
 }
 
