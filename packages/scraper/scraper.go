@@ -20,6 +20,10 @@ var (
 	scraperLog = Log.WithField("File", "scraper.go")
 )
 
+//TODO: Look for better ways to divide code (Like a placeholder)
+//TODO Comment
+//TODO GoDoc
+
 // ---- Get Info ----
 
 //ScrapeInfo Query Animeunity with a defined keyword
@@ -28,13 +32,13 @@ func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
 	url := "https://animeunity.it/anime.php?c=archive"
 	// Instantiate default collector
 	c := colly.NewCollector(
-		// Restrict crawling to specific domains
-		//colly.AllowedDomains("animeunity.it"),
-		// Allow visiting the same page multiple times
-		//colly.AllowURLRevisit(),
-		// Allow crawling to be done in parallel / async
-		//colly.Async(true),
-		//colly.Debugger(&debug.LogDebugger{}),
+	// Restrict crawling to specific domains
+	//colly.AllowedDomains("animeunity.it"),
+	// Allow visiting the same page multiple times
+	//colly.AllowURLRevisit(),
+	// Allow crawling to be done in parallel / async
+	//colly.Async(true),
+	//colly.Debugger(&debug.LogDebugger{}),
 	)
 
 	// Before making a request print "Visiting ..."

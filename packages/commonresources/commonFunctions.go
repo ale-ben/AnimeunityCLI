@@ -12,10 +12,28 @@ const (
 	maxSingDescLen  = 0
 )
 
+//TODO: Look for better ways to divide code (Like a placeholder)
+//TODO: Test Files
+//TODO Comment
+//TODO GoDoc
+
+// ---- Common ----
+
+//PrintJSONAnimePageStruct Prints an array of anime pages as a JSON
+func PrintJSONAnimePageStruct(animePageList []AnimePageStruct){
+	for _, animePage := range animePageList {
+		fmt.Printf("{\n \"%s\",\n\"%s\",\n\"%s\",\n[]string{\n",animePage.AnimeID,animePage.AnimeURL,animePage.Titolo)
+		for _, ep := range animePage.Episodi {
+			fmt.Printf("\"%s\",\n",ep)
+		}
+		fmt.Printf("},\n%t,\n},",animePage.IsOVA)
+	}
+}
+
 // ---- Get Info -----
 
 // SetLogLevel Sets the log level
-func SetLogLevel(log *logrus.Logger,logLevel string) {
+func SetLogLevel(log *logrus.Logger, logLevel string) {
 	switch strings.ToLower(logLevel) {
 	case "trace":
 		(*log).SetLevel(logrus.TraceLevel)

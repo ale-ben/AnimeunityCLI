@@ -17,6 +17,10 @@ var (
 	downloadURLLog = Log.WithField("File", "downloadURL.go")
 )
 
+//TODO Test Files
+//TODO Comment
+//TODO GoDoc
+
 // DownloadURL Returns a list of episodes download url
 func DownloadURL(animePage commonresources.AnimePageStruct, season string) []commonresources.AnimePageStruct {
 	downloadURLLog.WithFields(logrus.Fields{
@@ -56,5 +60,5 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) []com
 
 // SetLogLevel Sets the log level
 func SetLogLevel(logLevel string) {
-	commonresources.SetLogLevel(log,logLevel)
+	commonresources.SetLogLevel(log, logLevel)
 }

@@ -16,6 +16,10 @@ var (
 	getInfoLog = Log.WithField("File", "getInfo.go")
 )
 
+//TODO Test Files
+//TODO Comment
+//TODO GoDoc
+
 // GetInfo Get a list of anime as a result of a keyword search
 func GetInfo(keyword string) []commonresources.AnimeStruct {
 	var animeList []commonresources.AnimeStruct
@@ -26,6 +30,5 @@ func GetInfo(keyword string) []commonresources.AnimeStruct {
 
 // SetLogLevel Sets the log level
 func SetLogLevel(logLevel string) {
-	commonresources.SetLogLevel(log,logLevel)
+	commonresources.SetLogLevel(log, logLevel)
 }
-

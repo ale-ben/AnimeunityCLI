@@ -1,5 +1,8 @@
 package commonresources
 
+//TODO Comment
+//TODO GoDoc
+
 // AnimeStruct An episode of an anime
 type AnimeStruct struct {
 	AnimeID        string

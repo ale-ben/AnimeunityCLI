@@ -8,9 +8,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 
+	"AnimeunityCLI/packages/commonresources"
 	"AnimeunityCLI/packages/downloadurl"
 	"AnimeunityCLI/packages/getinfo"
-	"AnimeunityCLI/packages/commonresources"
 )
 
 var (
@@ -27,6 +27,10 @@ var (
 	logLevel    = ""
 	version     = "v1.0"
 )
+
+//TODO Test Files
+//TODO Comment
+//TODO GoDoc
 
 func main() {
 	app := &cli.App{
@@ -149,6 +153,7 @@ func getDownload() error {
 	animePage := commonresources.AnimePageStruct{"", inputURL, "", []string{}, false}
 	animePageList := downloadurl.DownloadURL(animePage, season)
 	commonresources.PrintURLList(animePageList)
+	commonresources.PrintJSONAnimePageStruct(animePageList)
 	return nil
 }
 
@@ -183,10 +188,10 @@ func quickDownload() error {
 }
 
 func setLogLevel() {
-	commonresources.SetLogLevel(log,logLevel)
+	commonresources.SetLogLevel(log, logLevel)
 }
 
-func setGlobalLogLevel(){
+func setGlobalLogLevel() {
 	setLogLevel()
 	getinfo.SetLogLevel(logLevel)
 	downloadurl.SetLogLevel(logLevel)
