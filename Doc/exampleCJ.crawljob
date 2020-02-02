@@ -1,0 +1,21 @@
+  {
+    text= https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDHero/HighSchoolDxDHero_Ep_02_SUB_ITA.mp4
+    downloadFolder=  /Users/alessandrobenetton/Documents/Coding/GoLang/AnimeunityCLI/OUT/Downloads
+    enabled= true
+    autoStart= true
+    autoConfirm= true
+  }
+  {
+    text= https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDHero/HighSchoolDxDHero_Ep_01_SUB_ITA.mp4
+    downloadFolder=  /Users/alessandrobenetton/Documents/Coding/GoLang/AnimeunityCLI/OUT/Downloads
+    enabled= true
+    autoStart= true
+    autoConfirm= true
+  }
+  {
+    text= https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDHero/HighSchoolDxDHero_Ep_00_SUB_ITA.mp4
+    downloadFolder=  /Users/alessandrobenetton/Documents/Coding/GoLang/AnimeunityCLI/OUT/Downloads
+    enabled= true
+    autoStart= true
+    autoConfirm= true
+  }
