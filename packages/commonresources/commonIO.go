@@ -5,13 +5,18 @@ import (
 	"path/filepath"
 )
 
-//WriteToFile Writes to a file
-func WriteToFile(fileDir string,fileName string, fileContent string) error {
-	var err error = nil
+/*
+WriteToFile is used to write to a file.
 
+Parameters:
+	fileDir string //Where to create the file
+	fileName string //Name of the file
+	fileContent string //Content of the file
+ */
+func WriteToFile(fileDir string,fileName string, fileContent string) (err error) {
 	byteArr := []byte(fileContent)
-	completeFilePath := filepath.Join(fileDir,fileName)
-	completeFilePath, err = filepath.Abs(completeFilePath)
+
+	completeFilePath,err := filepath.Abs(filepath.Join(fileDir,fileName))
 
 	if err != nil {
 		return err
@@ -19,15 +24,23 @@ func WriteToFile(fileDir string,fileName string, fileContent string) error {
 
 	err = ioutil.WriteFile(completeFilePath, byteArr, 0777)
 
-	return err
+	return
 }
 
-//ReadFromFile Reads from a file
-func ReadFromFile(fileDir string,fileName string) (string, error) {
-	completeFilePath, err1 := filepath.Abs(filepath.Join(fileDir,fileName))
+/*
+ReadFromFile is used to read from a file.
 
-	if err1 != nil {
-		return "", err1
+Parameters:
+	fileDir string //Where to create the file
+	fileName string //Name of the file
+
+Returns	a string containing the content of the file and an error (usually == nil)
+ */
+func ReadFromFile(fileDir string,fileName string) (string, error) {
+	completeFilePath, err := filepath.Abs(filepath.Join(fileDir,fileName))
+
+	if err != nil {
+		return "", err
 	}
 
 	data, err := ioutil.ReadFile(completeFilePath)

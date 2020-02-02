@@ -1,25 +1,31 @@
+//	Package commonresources provides common structs and function to the whole program
 package commonresources
 
-//TODO Comment
-//TODO GoDoc
+/*
+AnimeStruct contains the overall info on an anime season.
 
-// AnimeStruct An episode of an anime
+This is used when searching an anime.
+ */
 type AnimeStruct struct {
-	AnimeID        string
-	Titolo         string
-	ImageURL       string
-	Descrizione    string
-	Episodi        int
-	DurataEpisodio int
-	DurataTotale   int
-	Anno           int
+	AnimeID         string
+	Title           string
+	ImageURL        string
+	Description     string
+	NumEpisodes     int //Number of episodes in the season
+	EpisodeDuration int //Duration of a single episode in minutes
+	TotalDuration   int //Overall duration in minutes of the season (EpisodeDuration * NumEpisodes)
+	Year            int
 }
 
-//AnimePageStruct Struct of an anime page
+/*
+AnimePageStruct contains all the specific info of an anime season, including download links.
+
+This is used when looking for anime episodes.
+*/
 type AnimePageStruct struct {
-	AnimeID  string
-	AnimeURL string
-	Titolo   string
-	Episodi  []string
-	IsOVA    bool
+	AnimeID     string
+	AnimeURL    string
+	Title       string
+	EpisodeList []string
+	IsOVA       bool
 }
