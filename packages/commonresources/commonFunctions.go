@@ -12,8 +12,6 @@ const (
 )
 
 //TODO: Look for better ways to divide code (Like a placeholder)
-//TODO Comment
-//TODO GoDoc
 
 // ---- Common ----
 
@@ -145,7 +143,7 @@ func Sort(animePageList []AnimePageStruct) []AnimePageStruct {
 
 		//Bubble sort the list (Should already be in the right order)
 		for j := 0; j < len(list)-1; j++ {
-			if list[j] > list[j+1] {
+			if strings.ToLower(list[j]) > strings.ToLower(list[j+1]) {
 				swap = list[j]
 				list[j] = list[j+1]
 				list[j+1] = swap

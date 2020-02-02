@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 )
 
+//TODO: Test
+
 /*
 WriteToFile is used to write to a file.
 
