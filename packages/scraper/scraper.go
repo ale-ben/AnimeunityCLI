@@ -21,19 +21,17 @@ var (
 )
 
 //TODO: Look for better ways to divide code (Like a placeholder)
-//TODO Comment
-//TODO GoDoc
 
 // ---- Get Info ----
 
-//ScrapeInfo Query Animeunity with a defined keyword
+//ScrapeInfo query Animeunity with a defined keyword
 func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
 
 	url := "https://animeunity.it/anime.php?c=archive"
 	// Instantiate default collector
 	c := colly.NewCollector(
 	// Restrict crawling to specific domains
-	//colly.AllowedDomains("animeunity.it"),
+	colly.AllowedDomains("animeunity.it"), //Prevent the scraper from visiting other websites
 	// Allow visiting the same page multiple times
 	//colly.AllowURLRevisit(),
 	// Allow crawling to be done in parallel / async
@@ -46,10 +44,10 @@ func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
 		scraperLog.Debug("Visiting ", r.URL.String())
 	})
 
-	// On every a element which has href attribute
+	// On every a div which has href attribute
 	c.OnHTML("div", func(e *colly.HTMLElement) {
 		//Check for episode numbers
-		if strings.Contains(e.Attr("class"), "card archive-card") {
+		if strings.Contains(e.Attr("class"), "card archive-card") { //On every element that has class with card archive-card
 
 			texts := e.ChildTexts(".card-text")
 			var ep, durata, anno int
@@ -71,7 +69,7 @@ func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
 
 			}
 
-			anime := commonresources.AnimeStruct{e.ChildAttr("a", "href")[13:], e.ChildText(".card-title"), e.ChildAttr("img", "src"), e.ChildText(".archive-plot"), ep, durata, ep * durata, anno}
+			anime := commonresources.AnimeStruct{AnimeID: e.ChildAttr("a", "href")[13:], Title: e.ChildText(".card-title"), ImageURL: e.ChildAttr("img", "src"), Description: e.ChildText(".archive-plot"), NumEpisodes: ep, EpisodeDuration: durata, TotalDuration: ep * durata, Year: anno}
 
 			*animeList = append(*animeList, anime)
 		}
@@ -94,7 +92,7 @@ func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
 
 // ---- Get Download URL ----
 
-//SeasonScraper Given a Anime Page look for the season list
+//SeasonScraper given a Anime Page look for the season list
 func SeasonScraper(baseURL string, season string, animePageList *[]commonresources.AnimePageStruct) {
 
 	// Instantiate default collector
@@ -146,7 +144,7 @@ func SeasonScraper(baseURL string, season string, animePageList *[]commonresourc
 	c.Visit(baseURL)
 }
 
-//EpisodeScraper Given an anime page look for the episodes download URL
+//EpisodeScraper given an anime page look for the episodes download URL
 func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
 
 	// Instantiate default collector
@@ -163,10 +161,10 @@ func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
 	c.OnHTML("h1", func(e *colly.HTMLElement) {
 
 		//Check for episode numbers
-		if strings.Contains(e.Attr("class"), "cus_title") && (*animePage).Titolo == "" {
+		if strings.Contains(e.Attr("class"), "cus_title") && (*animePage).Title == "" {
 			title := (strings.Split(e.Text, " - "))[0]
 			scraperLog.WithField("Title", title).Debug("Title Found")
-			(*animePage).Titolo = title
+			(*animePage).Title = title
 		}
 	})
 
@@ -188,7 +186,7 @@ func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
 
 		url := e.ChildAttr("source", "src")
 		scraperLog.WithField("URL", url).Debug("Episode Found")
-		(*animePage).Episodi = append((*animePage).Episodi, url)
+		(*animePage).EpisodeList = append((*animePage).EpisodeList, url)
 	})
 
 	// Before making a request print "Visiting ..."

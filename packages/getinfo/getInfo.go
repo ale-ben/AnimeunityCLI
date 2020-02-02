@@ -17,10 +17,8 @@ var (
 )
 
 //TODO Test Files
-//TODO Comment
-//TODO GoDoc
 
-// GetInfo Get a list of anime as a result of a keyword search
+// GetInfo get a list of anime as a result of a keyword search
 func GetInfo(keyword string) []commonresources.AnimeStruct {
 	var animeList []commonresources.AnimeStruct
 
