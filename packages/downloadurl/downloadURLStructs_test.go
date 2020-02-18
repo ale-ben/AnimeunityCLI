@@ -5,7 +5,7 @@ import "AnimeunityCLI/packages/commonresources"
 var (
 	testCases = []Test{
 		{
-			commonresources.AnimePageStruct{"200","https://animeunity.it/anime.php?id=200","",nil,false},
+			commonresources.AnimePageStruct{"200", "https://animeunity.it/anime.php?id=200", "", nil, false},
 			commonresources.AnimePageStruct{
 				"200",
 				"https://animeunity.it/anime.php?id=200",
@@ -29,7 +29,7 @@ var (
 			},
 		},
 		{
-			commonresources.AnimePageStruct{"666","https://animeunity.it/anime.php?id=666","",nil,true},
+			commonresources.AnimePageStruct{"666", "https://animeunity.it/anime.php?id=666", "", nil, true},
 			commonresources.AnimePageStruct{
 				"666",
 				"https://animeunity.it/anime.php?id=666",
@@ -43,7 +43,7 @@ var (
 			},
 		},
 		{
-			commonresources.AnimePageStruct{"203","https://animeunity.it/anime.php?id=203","",nil,false},
+			commonresources.AnimePageStruct{"203", "https://animeunity.it/anime.php?id=203", "", nil, false},
 			commonresources.AnimePageStruct{
 				"203",
 				"https://animeunity.it/anime.php?id=203",

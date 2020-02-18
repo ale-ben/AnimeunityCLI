@@ -25,16 +25,20 @@ The season parameter can be:
 - NOOVA (Returns only the URLs but the OVA episodes)
 - ALL (Returns only the URLs for all the seasons)
 - NO (Default)(Downloads only the season you pass as URL)
- */
+*/
 func DownloadURL(animePage commonresources.AnimePageStruct, season string) (animePageList []commonresources.AnimePageStruct) {
 	downloadURLLog.WithFields(logrus.Fields{
 		"animePage": animePage,
 		"Season":    season,
-	}).Debug("DownloadURL")
+	}).Trace("<DownloadURL>")
 
 	//Check for seasons if required
 	if strings.ToLower(season) != "no" {
-		downloadURLLog.WithField("Season", season).Info("Looking for seasons")
+		downloadURLLog.WithFields(
+			logrus.Fields{
+				"Season": season,
+				"Anime":  animePage,
+			}).Info("Looking for seasons")
 
 		var url string
 
@@ -44,14 +48,27 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) (anim
 			animePage.AnimeURL = url
 		} else {
 			url = animePage.AnimeURL
-			animePage.AnimeID = url[13:]
+			animePage.AnimeID = url[35:]
 		}
+
+		downloadURLLog.WithField("Anime", animePage).Debug("Updated basic Season Info")
 
 		//Update the animePageList with the scraper to get all the seasons and all the info for every season
 		scraper.SeasonScraper(url, strings.ToLower(season), &animePageList)
 
+		if log.GetLevel() == logrus.DebugLevel || log.GetLevel() == logrus.TraceLevel {
+			for _, animeP := range animePageList {
+				downloadURLLog.WithFields(
+					logrus.Fields{
+						"Season":      season,
+						"Anime Pages": animeP,
+					}).Info("Season Scraping Completed")
+			}
+		}
+
 		//If there is only one season and the user required all seasons the scraper would return an empty list because there would be no season section on the website
 		if len(animePageList) == 0 {
+			downloadURLLog.WithField("Season", season).Debug("No other season found, using default URL")
 			animePageList = append(animePageList, animePage)
 		}
 	} else {
@@ -62,16 +79,22 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) (anim
 	for i := 0; i < len(animePageList); i++ {
 		if animePageList[i].AnimeID != "" {
 			animePageList[i].AnimeURL = "https://animeunity.it/anime.php?id=" + animePageList[i].AnimeID
-		}else {
+		} else {
 			animePage.AnimeID = animePageList[i].AnimeURL[13:]
 		}
+		downloadURLLog.WithField("Updated Anime", animePageList[i]).Debug("Updating Anime Info")
 	}
 
 	//For each anime page launch the scraper and scrape for episodes URLs
 	for i := 0; i < len(animePageList); i++ {
 		scraper.EpisodeScraper(&(animePageList[i]))
+		downloadURLLog.WithField("Anime", animePageList[i]).Info("Episode Scraping Completed")
 	}
 
+	downloadURLLog.WithFields(logrus.Fields{
+		"animePage": animePage,
+		"Season":    season,
+	}).Trace("</DownloadURL>")
 	return animePageList
 }
 

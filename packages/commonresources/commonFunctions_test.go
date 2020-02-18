@@ -7,9 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestUnique(t *testing.T) {
-	assert.Equal(t,correct,commonresources.Unique(original))
+	assert.Equal(t, correct, commonresources.Unique(original))
 }
 
 //TODO: TestSort

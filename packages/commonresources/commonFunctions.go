@@ -11,6 +11,15 @@ const (
 	maxFullDescLen  = 500
 )
 
+var (
+	//General logger
+	log = logrus.New()
+	//Log Package wide logger
+	Log = log.WithField("Package", "commonresources")
+	//File wide logger
+	commonFunctionsLog = Log.WithField("File", "commonFunctions.go")
+)
+
 //TODO: Look for better ways to divide code (Like a placeholder)
 
 // ---- Common ----
@@ -60,9 +69,14 @@ This parameter can be:
 Any other value results in the max length being set to 0 (Unlimited)
 */
 func PrintAnimeList(animeList []AnimeStruct, mode int) {
+	commonFunctionsLog.WithField("Mode",mode).Trace("<PrintAnimeList>")
+
 	for _, anime := range animeList {
+		commonFunctionsLog.WithField("Anime", anime).Info("Printing Anime")
 		PrintAnime(anime, mode)
 	}
+
+	commonFunctionsLog.WithField("Mode",mode).Trace("</PrintAnimeList>")
 }
 
 /*
@@ -75,6 +89,7 @@ This parameter can be:
 Any other value results in the max length being set to 0 (Unlimited)
 */
 func PrintAnime(anime AnimeStruct, mode int) {
+	commonFunctionsLog.WithField("Mode",mode).Trace("<PrintAnime>")
 	var maxDescLen int
 
 	fmt.Printf("\n\n%s - %s\n", anime.AnimeID, anime.Title)
@@ -95,10 +110,13 @@ func PrintAnime(anime AnimeStruct, mode int) {
 
 	//Reduce the description only if maxDescLen != 0 and the description length is actually greater then the max one
 	if maxDescLen != 0 && len(anime.Description) > maxDescLen {
+		commonFunctionsLog.WithField("Max Length",maxDescLen).Debug("Cutting Description")
 		fmt.Println(anime.Description[:maxDescLen] + "...")
 	} else {
 		fmt.Println(anime.Description)
 	}
+
+	commonFunctionsLog.WithField("Mode",mode).Trace("</PrintAnime>")
 }
 
 //---- Get Download URL ----
@@ -109,6 +127,8 @@ Unique is used to remove duplicate url from the episode list
 Honest to God I have no idea how this works, I found on the web this function to remove duplicates and I used it.
 */
 func Unique(animePageList []AnimePageStruct) []AnimePageStruct {
+	commonFunctionsLog.Trace("<Unique>")
+
 	keys := make(map[string]bool)
 	list := []string{}
 
@@ -122,6 +142,7 @@ func Unique(animePageList []AnimePageStruct) []AnimePageStruct {
 		animePageList[i].EpisodeList = list
 		list = nil
 	}
+	commonFunctionsLog.Trace("</Unique>")
 	return animePageList
 }
 
@@ -131,6 +152,7 @@ Sort is used to sort the list of episodes.
 Since usually the array is already sorted but it is saved backwards first we invert the array and then we ran it through a bubble sort to check the sorting.
 */
 func Sort(animePageList []AnimePageStruct) []AnimePageStruct {
+	commonFunctionsLog.Trace("<Sort>")
 	list := []string{}
 	swap := ""
 
@@ -144,6 +166,11 @@ func Sort(animePageList []AnimePageStruct) []AnimePageStruct {
 		//Bubble sort the list (Should already be in the right order)
 		for j := 0; j < len(list)-1; j++ {
 			if strings.ToLower(list[j]) > strings.ToLower(list[j+1]) {
+				commonFunctionsLog.WithFields(logrus.Fields{
+					"Position": j,
+					"URL1":list[j],
+					"URL2":list[j+1],
+				}).Debug("Swapping URLs")
 				swap = list[j]
 				list[j] = list[j+1]
 				list[j+1] = swap
@@ -154,6 +181,7 @@ func Sort(animePageList []AnimePageStruct) []AnimePageStruct {
 		animePageList[i].EpisodeList = list
 		list = nil
 	}
+	commonFunctionsLog.Trace("</Sort>")
 	return animePageList
 }
 
@@ -165,8 +193,12 @@ This function calls Unique and Sort on the list before printing it.
 The grouping boolean parameter determines if the URLs are going to be splitted in groups or not, if true group size is automatically evaluated based on number of elements and can be 5,10,15,30
 */
 func PrintURLList(animePageList []AnimePageStruct, grouping bool) {
+	commonFunctionsLog.WithField("Grouping",grouping).Trace("<PrintURLList>")
+
 	animePageList = Sort(Unique(animePageList))
 	for _, animePage := range animePageList {
+		commonFunctionsLog.WithField("Anime",animePage).Debug("Printing Anime")
+
 		i := 0
 		groupSize := 0
 		arrSize := len(animePage.EpisodeList)
@@ -191,6 +223,7 @@ func PrintURLList(animePageList []AnimePageStruct, grouping bool) {
 		}
 
 		for _, url := range animePage.EpisodeList {
+			commonFunctionsLog.WithField("URL",url).Debug("Printing URL")
 			if grouping && i == groupSize {
 				fmt.Println("")
 				i = 0
@@ -200,4 +233,6 @@ func PrintURLList(animePageList []AnimePageStruct, grouping bool) {
 		}
 	}
 	fmt.Println()
+
+	commonFunctionsLog.WithField("Grouping",grouping).Trace("</PrintURLList>")
 }

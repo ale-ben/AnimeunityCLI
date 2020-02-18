@@ -20,9 +20,11 @@ var (
 
 // GetInfo get a list of anime as a result of a keyword search
 func GetInfo(keyword string) []commonresources.AnimeStruct {
+	getInfoLog.WithField("keyword", keyword).Trace("<GetInfo>")
 	var animeList []commonresources.AnimeStruct
 
 	scraper.ScrapeInfo(keyword, &animeList)
+	getInfoLog.WithField("keyword", keyword).Trace("</GetInfo>")
 	return animeList
 }
 

@@ -9,11 +9,11 @@ import (
 
 type Test struct {
 	originalPage commonresources.AnimePageStruct
-	correctPage commonresources.AnimePageStruct
+	correctPage  commonresources.AnimePageStruct
 }
 
 func TestDownloadURL(t *testing.T) {
 	for _, test := range testCases {
-		assert.Equal(t,test.correctPage,downloadurl.DownloadURL(test.originalPage,"NO")[0])
+		assert.Equal(t, test.correctPage, downloadurl.DownloadURL(test.originalPage, "NO")[0])
 	}
 }

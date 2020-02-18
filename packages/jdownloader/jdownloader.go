@@ -12,7 +12,7 @@ var (
 	//General logger
 	log = logrus.New()
 	//Log Package wide logger
-	Log = log.WithField("Package", "getinfo")
+	Log = log.WithField("Package", "jdownloader")
 	//File wide logger
 	jdownloaderLog = Log.WithField("File", "getInfo.go")
 )
@@ -21,16 +21,22 @@ var (
 //TODO Comment
 
 func createCrawlFile(animePage commonresources.AnimePageStruct, crawlPath string, jdownloadPath string) (err error) {
+	jdownloaderLog.WithFields(logrus.Fields{
+		"Anime": animePage,
+		"Crawl Path": crawlPath,
+		"Download Path" : jdownloadPath,
+	}).Trace("<createCrawlPath>")
+
 	fileContent := ""
 
 	//Formatting the string
-	formattedAnimeTitle := strings.ReplaceAll(animePage.Title," ","_")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle,"!","")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle,":","")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle,",","")
+	formattedAnimeTitle := strings.ReplaceAll(animePage.Title, " ", "_")
+	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, "!", "")
+	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, ":", "")
+	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, ",", "")
 
 	//Creating the AnimeDir
-	animeDir := filepath.Join(jdownloadPath,formattedAnimeTitle)
+	animeDir := filepath.Join(jdownloadPath, formattedAnimeTitle)
 
 	for _, ep := range animePage.EpisodeList {
 		fileContent += "{\n"
@@ -41,20 +47,39 @@ func createCrawlFile(animePage commonresources.AnimePageStruct, crawlPath string
 		fileContent += "\tautoConfirm= true\n"
 		fileContent += "}\n"
 	}
+	jdownloaderLog.WithFields(logrus.Fields{
+		"File Path" : crawlPath,
+		"File Title" : formattedAnimeTitle+".crawljob",
+		"File Content" : fileContent,
+	}).Debug("Writing to file")
+	err = commonresources.WriteToFile(crawlPath, formattedAnimeTitle+".crawljob", fileContent)
 
-	err = commonresources.WriteToFile(crawlPath,formattedAnimeTitle + ".crawljob",fileContent)
-
+	jdownloaderLog.WithFields(logrus.Fields{
+		"Anime": animePage,
+		"Crawl Path": crawlPath,
+		"Download Path" : jdownloadPath,
+	}).Trace("</createCrawlPath>")
 	return
 }
 
-func SendToJDownloader(animePageList []commonresources.AnimePageStruct, crawlPath string, jdownloadPath string) (err error){
+func SendToJDownloader(animePageList []commonresources.AnimePageStruct, crawlPath string, jdownloadPath string) (err error) {
+	jdownloaderLog.WithFields(logrus.Fields{
+		"Crawl Path": crawlPath,
+		"Download Path" : jdownloadPath,
+	}).Trace("<SendToJDownloader>")
+
 	for _, animePage := range animePageList {
-		err = createCrawlFile(animePage,crawlPath,jdownloadPath)
+		jdownloaderLog.WithField("Anime",animePage).Debug("Creating file for Anime")
+		err = createCrawlFile(animePage, crawlPath, jdownloadPath)
 		if err != nil {
-			jdownloaderLog.WithField("Error",err).Warn("Error while creating crawljobs")
+			jdownloaderLog.WithField("Error", err).Warn("Error while creating crawljobs")
 		}
 	}
 
+	jdownloaderLog.WithFields(logrus.Fields{
+		"Crawl Path": crawlPath,
+		"Download Path" : jdownloadPath,
+	}).Trace("</SendToJDownloader>")
 	return
 }
 

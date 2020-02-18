@@ -5,7 +5,7 @@ package commonresources
 AnimeStruct contains the overall info on an anime season.
 
 This is used when searching an anime.
- */
+*/
 type AnimeStruct struct {
 	AnimeID         string
 	Title           string
@@ -28,5 +28,5 @@ type AnimePageStruct struct {
 	Title       string
 	EpisodeList []string
 	IsOVA       bool
-	Year int
+	Year        int
 }

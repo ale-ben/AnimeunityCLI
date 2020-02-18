@@ -81,14 +81,14 @@ func main() {
 			Name:        "crawlpath",
 			Usage:       "Specify the path for the CrawlJobs. IMPORTANT you must provide a value for both crawlpath and jdownloadpath for this to work",
 			Destination: &crawlPath,
-			Value: "",
+			Value:       "",
 		},
 		&cli.StringFlag{
 			Name:        "jdownloadpath",
-			Aliases: []string{"jdp"},
+			Aliases:     []string{"jdp"},
 			Usage:       "Specify the path where JDownloader should create the subdirectories. IMPORTANT you must provide a value for both crawlpath and jdownloadpath for this to work",
 			Destination: &downloadPath,
-			Value: "",
+			Value:       "",
 		},
 	}
 
@@ -112,7 +112,7 @@ func main() {
 				Category: "interactive",
 				Aliases:  []string{"qd"},
 				Usage:    "Search for a keyword and choose from a list to get download links",
-				Flags:    append(searchFlags, append(jdownloaderFlags,seasonFlag,groupPrintFlag)...),
+				Flags:    append(searchFlags, append(jdownloaderFlags, seasonFlag, groupPrintFlag)...),
 				Action: func(c *cli.Context) error {
 					setGlobalLogLevel()
 					log.WithFields(logrus.Fields{
@@ -143,7 +143,7 @@ func main() {
 				Category: "batch",
 				Aliases:  []string{"dl"},
 				Usage:    "Prints the download links for an anime season",
-				Flags:    append(downloadFlags, append(jdownloaderFlags,seasonFlag,groupPrintFlag)...),
+				Flags:    append(downloadFlags, append(jdownloaderFlags, seasonFlag, groupPrintFlag)...),
 				Action: func(c *cli.Context) error {
 					setGlobalLogLevel()
 					log.WithFields(logrus.Fields{
@@ -164,34 +164,45 @@ func main() {
 
 //scanInput returns the next line from the keyboard
 func scanInput() string {
+	mainLog.Trace("<scanInput/>")
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	return scanner.Text()
 }
 
 func getInfo() error {
+	mainLog.Trace("<getInfo/>")
 	commonresources.PrintAnimeList(getinfo.GetInfo(keyword), 1)
 	return nil
 }
 
 func getDownload() error {
+	mainLog.Trace("<getDownload>")
 	animePage := commonresources.AnimePageStruct{AnimeURL: inputURL, EpisodeList: []string{}} //Create an empty animePage only with the given URL
+	mainLog.Debug("Launching link getter")
 	animePageList := downloadurl.DownloadURL(animePage, season)
-	commonresources.PrintURLList(animePageList, true)
+	mainLog.Debug("Printing URLs")
+	commonresources.PrintURLList(animePageList, group)
 	if crawlPath != "" && downloadPath != "" {
-		jdownloader.SendToJDownloader(animePageList,crawlPath,downloadPath)
+		mainLog.Debug("Creating Crawlpaths")
+		jdownloader.SendToJDownloader(animePageList, crawlPath, downloadPath)
 	}
+	mainLog.Trace("</getDownload>")
 	return nil
 }
 
 func quickDownload() error {
+	mainLog.Trace("<quickDownload>")
+	mainLog.Debug("Getting Info")
 	animeList := getinfo.GetInfo(keyword)
+	mainLog.Debug("Printing Anime List")
 	commonresources.PrintAnimeList(animeList, 0)
 	if len(animeList) == 0 {
 		fmt.Println("No anime found, try changing the keyword")
 		os.Exit(0)
 	}
 	key := -1
+	mainLog.Debug("Printing Anime List")
 	for key == -1 {
 		fmt.Printf("\n<- ID: ")
 		id := scanInput()
@@ -209,11 +220,16 @@ func quickDownload() error {
 	commonresources.PrintAnime(animeList[key], 1)
 	fmt.Printf("\nLooking for episodes\n")
 	animePage := commonresources.AnimePageStruct{AnimeID: animeList[key].AnimeID, AnimeURL: inputURL, Title: animeList[key].Title, EpisodeList: []string{}}
+	mainLog.Debug("Launching link getter")
 	animePageList := downloadurl.DownloadURL(animePage, season)
-	commonresources.PrintURLList(animePageList, true)
+	mainLog.Debug("Printing URLs")
+	commonresources.PrintURLList(animePageList, group)
 	if crawlPath != "" && downloadPath != "" {
-		jdownloader.SendToJDownloader(animePageList,crawlPath,downloadPath)
+		mainLog.Debug("Creating Crawlpaths")
+		jdownloader.SendToJDownloader(animePageList, crawlPath, downloadPath)
 	}
+
+	mainLog.Trace("</quickDownload>")
 	return nil
 }
 
@@ -222,6 +238,7 @@ func setLogLevel() {
 }
 
 func setGlobalLogLevel() {
+	mainLog.Trace("<setGlobalLogLevel/>")
 	setLogLevel()
 	getinfo.SetLogLevel(logLevel)
 	downloadurl.SetLogLevel(logLevel)

@@ -113,10 +113,6 @@ var (
 		},
 	}
 
-
-
-
-
 	correct = []commonresources.AnimePageStruct{
 		{
 			"200",

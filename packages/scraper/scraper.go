@@ -26,12 +26,16 @@ var (
 
 //ScrapeInfo query Animeunity with a defined keyword
 func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
+	scraperLog.WithFields(logrus.Fields{
+		"Keyword" : keyword,
+		"Anime" : *animeList,
+	}).Trace("<ScrapeInfo>")
 
 	url := "https://animeunity.it/anime.php?c=archive"
 	// Instantiate default collector
 	c := colly.NewCollector(
-	// Restrict crawling to specific domains
-	colly.AllowedDomains("animeunity.it"), //Prevent the scraper from visiting other websites
+		// Restrict crawling to specific domains
+		colly.AllowedDomains("animeunity.it"), //Prevent the scraper from visiting other websites
 	// Allow visiting the same page multiple times
 	//colly.AllowURLRevisit(),
 	// Allow crawling to be done in parallel / async
@@ -88,12 +92,21 @@ func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
 	if err != nil {
 		scraperLog.WithField("Error", err).Error("Error in scraper")
 	}
+
+	scraperLog.WithFields(logrus.Fields{
+		"Keyword" : keyword,
+		"Anime" : *animeList,
+	}).Trace("<ScrapeInfo>")
 }
 
 // ---- Get Download URL ----
 
 //SeasonScraper given a Anime Page look for the season list
 func SeasonScraper(baseURL string, season string, animePageList *[]commonresources.AnimePageStruct) {
+	scraperLog.WithFields(logrus.Fields{
+		"Base URL" : baseURL,
+		"Season" : season,
+	}).Trace("<SeasonScraper>")
 
 	// Instantiate default collector
 	c := colly.NewCollector(
@@ -142,11 +155,17 @@ func SeasonScraper(baseURL string, season string, animePageList *[]commonresourc
 	})
 
 	c.Visit(baseURL)
+
+	scraperLog.WithFields(logrus.Fields{
+		"Base URL" : baseURL,
+		"Season" : season,
+	}).Trace("</SeasonScraper>")
 }
 
 //EpisodeScraper given an anime page look for the episodes download URL
 func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
-	
+	scraperLog.WithField("Anime",*animePage).Trace("<EpisodeScraper>")
+
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Restrict crawling to specific domains
@@ -202,4 +221,5 @@ func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
 	})
 
 	c.Visit((*animePage).AnimeURL)
+	scraperLog.WithField("Anime",*animePage).Trace("</EpisodeScraper>")
 }
