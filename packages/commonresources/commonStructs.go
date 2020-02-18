@@ -28,4 +28,5 @@ type AnimePageStruct struct {
 	Title       string
 	EpisodeList []string
 	IsOVA       bool
+	Year int
 }

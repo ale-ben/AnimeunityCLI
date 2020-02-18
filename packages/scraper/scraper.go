@@ -122,7 +122,7 @@ func SeasonScraper(baseURL string, season string, animePageList *[]commonresourc
 					requested = true
 				}
 				if requested {
-					animePage := commonresources.AnimePageStruct{seasonID, "", seasonTitle, []string{}, isOVA}
+					animePage := commonresources.AnimePageStruct{AnimeID: seasonID, Title: seasonTitle, EpisodeList: []string{}, IsOVA: isOVA}
 					*animePageList = append(*animePageList, animePage)
 				}
 			}
@@ -146,7 +146,7 @@ func SeasonScraper(baseURL string, season string, animePageList *[]commonresourc
 
 //EpisodeScraper given an anime page look for the episodes download URL
 func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
-
+	
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Restrict crawling to specific domains

@@ -13,5 +13,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	github.com/urfave/cli/v2 v2.1.1
 	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect
+	golang.org/x/tools v0.0.0-20190606124116-d0a3d012864b
 	google.golang.org/appengine v1.6.5 // indirect
 )
