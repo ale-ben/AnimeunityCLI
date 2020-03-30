@@ -38,7 +38,7 @@ func PrintJSONAnimePageStruct(animePageList []AnimePageStruct) {
 // ---- Get Info -----
 
 // SetLogLevel Sets the log level for the giver logger
-func SetLogLevel(log *logrus.Logger, logLevel string) {
+func SetLogLevel(log *logrus.Logger, logLevel string,file string) {
 	switch strings.ToLower(logLevel) {
 	case "trace":
 		(*log).SetLevel(logrus.TraceLevel)
@@ -56,7 +56,11 @@ func SetLogLevel(log *logrus.Logger, logLevel string) {
 		(*log).SetLevel(logrus.ErrorLevel)
 		break
 	}
-	(*log).WithField("Level", strings.ToLower(logLevel)).Debug("Log Level Set")
+	(*log).WithFields(
+		logrus.Fields{
+			"Level": strings.ToLower(logLevel),
+			"File": file,
+		}).Debug("Log Level Set")
 }
 
 /*

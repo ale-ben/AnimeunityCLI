@@ -2,6 +2,7 @@ package main
 
 import (
 	"AnimeunityCLI/packages/jdownloader"
+	"AnimeunityCLI/packages/scraper"
 	"bufio"
 	"fmt"
 	"os"
@@ -30,6 +31,7 @@ var (
 	crawlPath    = ""
 	downloadPath = ""
 	version      = "v1.0"
+	noPrintInfo  = false
 )
 
 //TODO Test Files
@@ -89,6 +91,13 @@ func main() {
 			Usage:       "Specify the path where JDownloader should create the subdirectories. IMPORTANT you must provide a value for both crawlpath and jdownloadpath for this to work",
 			Destination: &downloadPath,
 			Value:       "",
+		},
+		&cli.BoolFlag{
+			Name:        "noPrint",
+			Usage:       "Should the program NOT print download info/url(s)",
+			Destination: &noPrintInfo,
+			Value:       false,
+			Required:    false,
 		},
 	}
 
@@ -181,8 +190,10 @@ func getDownload() error {
 	animePage := commonresources.AnimePageStruct{AnimeURL: inputURL, EpisodeList: []string{}} //Create an empty animePage only with the given URL
 	mainLog.Debug("Launching link getter")
 	animePageList := downloadurl.DownloadURL(animePage, season)
-	mainLog.Debug("Printing URLs")
-	commonresources.PrintURLList(animePageList, group)
+	if !noPrintInfo {
+		mainLog.Debug("Printing URLs")
+		commonresources.PrintURLList(animePageList, group)
+	}
 	if crawlPath != "" && downloadPath != "" {
 		mainLog.Debug("Creating Crawlpaths")
 		jdownloader.SendToJDownloader(animePageList, crawlPath, downloadPath)
@@ -222,8 +233,10 @@ func quickDownload() error {
 	animePage := commonresources.AnimePageStruct{AnimeID: animeList[key].AnimeID, AnimeURL: inputURL, Title: animeList[key].Title, EpisodeList: []string{}}
 	mainLog.Debug("Launching link getter")
 	animePageList := downloadurl.DownloadURL(animePage, season)
-	mainLog.Debug("Printing URLs")
-	commonresources.PrintURLList(animePageList, group)
+	if !noPrintInfo {
+		mainLog.Debug("Printing URLs")
+		commonresources.PrintURLList(animePageList, group)
+	}
 	if crawlPath != "" && downloadPath != "" {
 		mainLog.Debug("Creating Crawlpaths")
 		jdownloader.SendToJDownloader(animePageList, crawlPath, downloadPath)
@@ -234,7 +247,7 @@ func quickDownload() error {
 }
 
 func setLogLevel() {
-	commonresources.SetLogLevel(log, logLevel)
+	commonresources.SetLogLevel(log, logLevel,"main.go")
 }
 
 func setGlobalLogLevel() {
@@ -242,5 +255,6 @@ func setGlobalLogLevel() {
 	setLogLevel()
 	getinfo.SetLogLevel(logLevel)
 	downloadurl.SetLogLevel(logLevel)
-
+	jdownloader.SetLogLevel(logLevel)
+	scraper.SetLogLevel(logLevel)
 }

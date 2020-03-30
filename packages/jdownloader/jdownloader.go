@@ -3,6 +3,7 @@ package jdownloader
 import (
 	"AnimeunityCLI/packages/commonresources"
 	"github.com/sirupsen/logrus"
+	"strconv"
 	"strings"
 
 	"path/filepath"
@@ -20,7 +21,18 @@ var (
 //TODO Test Files
 //TODO Comment
 
-func createCrawlFile(animePage commonresources.AnimePageStruct, crawlPath string, jdownloadPath string) (err error) {
+func formatTitle(oldTitile string) (newTitle string){
+
+	//Formatting the string
+	newTitle = strings.ReplaceAll(oldTitile, " ", "_")
+	newTitle = strings.ReplaceAll(newTitle, "!", "")
+	newTitle = strings.ReplaceAll(newTitle, ":", "")
+	newTitle = strings.ReplaceAll(newTitle, ",", "")
+
+	return
+}
+
+func createCrawlFile(animePage commonresources.AnimePageStruct, crawlPath string, jdownloadPath string, index int) (err error) {
 	jdownloaderLog.WithFields(logrus.Fields{
 		"Anime": animePage,
 		"Crawl Path": crawlPath,
@@ -30,13 +42,10 @@ func createCrawlFile(animePage commonresources.AnimePageStruct, crawlPath string
 	fileContent := ""
 
 	//Formatting the string
-	formattedAnimeTitle := strings.ReplaceAll(animePage.Title, " ", "_")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, "!", "")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, ":", "")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, ",", "")
+	formattedAnimeTitle := formatTitle(animePage.Title)
 
 	//Creating the AnimeDir
-	animeDir := filepath.Join(jdownloadPath, formattedAnimeTitle)
+	animeDir := filepath.Join(jdownloadPath, "Season_" + strconv.Itoa(index))
 
 	for _, ep := range animePage.EpisodeList {
 		fileContent += "{\n"
@@ -68,9 +77,19 @@ func SendToJDownloader(animePageList []commonresources.AnimePageStruct, crawlPat
 		"Download Path" : jdownloadPath,
 	}).Trace("<SendToJDownloader>")
 
+	formattedTitle := formatTitle(animePageList[0].Title)
+	jdownloadPath = filepath.Join(jdownloadPath,formattedTitle)
+
+	sNum := 0
+
 	for _, animePage := range animePageList {
 		jdownloaderLog.WithField("Anime",animePage).Debug("Creating file for Anime")
-		err = createCrawlFile(animePage, crawlPath, jdownloadPath)
+		if !animePage.IsOVA {
+			sNum = sNum + 1
+			err = createCrawlFile(animePage, crawlPath, jdownloadPath, sNum)
+		} else {
+			err = createCrawlFile(animePage, crawlPath, jdownloadPath, 0)
+		}
 		if err != nil {
 			jdownloaderLog.WithField("Error", err).Warn("Error while creating crawljobs")
 		}
@@ -85,5 +104,5 @@ func SendToJDownloader(animePageList []commonresources.AnimePageStruct, crawlPat
 
 // SetLogLevel Sets the log level
 func SetLogLevel(logLevel string) {
-	commonresources.SetLogLevel(log, logLevel)
+	commonresources.SetLogLevel(log, logLevel,"jdownloader.go")
 }
