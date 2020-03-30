@@ -30,5 +30,5 @@ func GetInfo(keyword string) []commonresources.AnimeStruct {
 
 // SetLogLevel Sets the log level
 func SetLogLevel(logLevel string) {
-	commonresources.SetLogLevel(log, logLevel)
+	commonresources.SetLogLevel(log, logLevel, "getInfo.go")
 }

@@ -124,18 +124,20 @@ func SeasonScraper(baseURL string, season string, animePageList *[]commonresourc
 			seasonTitle := e.ChildText("a[href]")
 			if len(seasonTitle) != 0 {
 				seasonID := e.ChildAttr("a", "href")[13:]
-				isOVA := strings.Contains(strings.ToLower(seasonTitle), "ova")
 				requested := false
+				seasonInfo := e.ChildText("a[class=text-secondary]")
+				year, _ := strconv.Atoi(seasonInfo[0:3])
+				isOVA := strings.Contains(strings.ToLower(seasonInfo), "ova") || strings.Contains(strings.ToLower(seasonInfo), "oav")
 				scraperLog.WithFields(logrus.Fields{
 					"Title": seasonTitle,
 					"ID":    seasonID,
 					"isOVA": isOVA,
 				}).Debug("Season Found")
-				if (season == "ova" && isOVA) || (season == "noova" && !isOVA) || (season == "all") {
+				if (season == "ova" && isOVA) || (season == "noova" && !isOVA) || (season == "all") || ((season == "no") && (baseURL == "https://animeunity.it/anime.php?id=" + seasonID)){
 					requested = true
 				}
 				if requested {
-					animePage := commonresources.AnimePageStruct{AnimeID: seasonID, Title: seasonTitle, EpisodeList: []string{}, IsOVA: isOVA}
+					animePage := commonresources.AnimePageStruct{AnimeID: seasonID, Title: seasonTitle, EpisodeList: []string{}, IsOVA: isOVA, Year: year}
 					*animePageList = append(*animePageList, animePage)
 				}
 			}
@@ -222,4 +224,9 @@ func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
 
 	c.Visit((*animePage).AnimeURL)
 	scraperLog.WithField("Anime",*animePage).Trace("</EpisodeScraper>")
+}
+
+// SetLogLevel Sets the log level
+func SetLogLevel(logLevel string) {
+	commonresources.SetLogLevel(log, logLevel,"scraper.go")
 }

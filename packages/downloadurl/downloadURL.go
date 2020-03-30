@@ -32,46 +32,41 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) (anim
 		"Season":    season,
 	}).Trace("<DownloadURL>")
 
-	//Check for seasons if required
-	if strings.ToLower(season) != "no" {
-		downloadURLLog.WithFields(
-			logrus.Fields{
-				"Season": season,
-				"Anime":  animePage,
-			}).Info("Looking for seasons")
+	downloadURLLog.WithFields(
+		logrus.Fields{
+			"Season": season,
+			"Anime":  animePage,
+		}).Info("Looking for seasons")
 
-		var url string
+	var url string
 
-		//Set the ID or the URL based on the other one
-		if animePage.AnimeID != "" {
-			url = "https://animeunity.it/anime.php?id=" + animePage.AnimeID
-			animePage.AnimeURL = url
-		} else {
-			url = animePage.AnimeURL
-			animePage.AnimeID = url[35:]
-		}
-
-		downloadURLLog.WithField("Anime", animePage).Debug("Updated basic Season Info")
-
-		//Update the animePageList with the scraper to get all the seasons and all the info for every season
-		scraper.SeasonScraper(url, strings.ToLower(season), &animePageList)
-
-		if log.GetLevel() == logrus.DebugLevel || log.GetLevel() == logrus.TraceLevel {
-			for _, animeP := range animePageList {
-				downloadURLLog.WithFields(
-					logrus.Fields{
-						"Season":      season,
-						"Anime Pages": animeP,
-					}).Info("Season Scraping Completed")
-			}
-		}
-
-		//If there is only one season and the user required all seasons the scraper would return an empty list because there would be no season section on the website
-		if len(animePageList) == 0 {
-			downloadURLLog.WithField("Season", season).Debug("No other season found, using default URL")
-			animePageList = append(animePageList, animePage)
-		}
+	//Set the ID or the URL based on the other one
+	if animePage.AnimeID != "" {
+		url = "https://animeunity.it/anime.php?id=" + animePage.AnimeID
+		animePage.AnimeURL = url
 	} else {
+		url = animePage.AnimeURL
+		animePage.AnimeID = url[35:]
+	}
+
+	downloadURLLog.WithField("Anime", animePage).Debug("Updated basic Season Info")
+
+	//Update the animePageList with the scraper to get all the seasons and all the info for every season
+	scraper.SeasonScraper(url, strings.ToLower(season), &animePageList)
+
+	if log.GetLevel() == logrus.DebugLevel || log.GetLevel() == logrus.TraceLevel {
+		for _, animeP := range animePageList {
+			downloadURLLog.WithFields(
+				logrus.Fields{
+					"Season":      season,
+					"Anime Pages": animeP,
+				}).Info("Season Scraping Completed")
+		}
+	}
+
+	//If there is only one season and the user required all seasons the scraper would return an empty list because there would be no season section on the website
+	if len(animePageList) == 0 {
+		downloadURLLog.WithField("Season", season).Debug("No other season found, using default URL")
 		animePageList = append(animePageList, animePage)
 	}
 
@@ -100,5 +95,5 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) (anim
 
 // SetLogLevel Sets the log level
 func SetLogLevel(logLevel string) {
-	commonresources.SetLogLevel(log, logLevel)
+	commonresources.SetLogLevel(log, logLevel, "downloadURL.go")
 }

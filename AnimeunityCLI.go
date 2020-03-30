@@ -2,6 +2,7 @@ package main
 
 import (
 	"AnimeunityCLI/packages/jdownloader"
+	"AnimeunityCLI/packages/scraper"
 	"bufio"
 	"fmt"
 	"os"
@@ -30,7 +31,7 @@ var (
 	crawlPath    = ""
 	downloadPath = ""
 	version      = "v1.0"
-	noPrintInfo = false
+	noPrintInfo  = false
 )
 
 //TODO Test Files
@@ -91,11 +92,11 @@ func main() {
 			Destination: &downloadPath,
 			Value:       "",
 		},
-		&cli.BoolFlag {
+		&cli.BoolFlag{
 			Name:        "noPrint",
 			Usage:       "Should the program NOT print download info/url(s)",
 			Destination: &noPrintInfo,
-			Value: false,
+			Value:       false,
 			Required:    false,
 		},
 	}
@@ -246,7 +247,7 @@ func quickDownload() error {
 }
 
 func setLogLevel() {
-	commonresources.SetLogLevel(log, logLevel)
+	commonresources.SetLogLevel(log, logLevel, "main.go")
 }
 
 func setGlobalLogLevel() {
@@ -256,4 +257,6 @@ func setGlobalLogLevel() {
 	downloadurl.SetLogLevel(logLevel)
 	commonresources.SetOwnLogLevel(logLevel)
 	jdownloader.SetLogLevel(logLevel)
+	jdownloader.SetLogLevel(logLevel)
+	scraper.SetLogLevel(logLevel)
 }
