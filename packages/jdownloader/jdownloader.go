@@ -3,6 +3,7 @@ package jdownloader
 import (
 	"AnimeunityCLI/packages/commonresources"
 	"github.com/sirupsen/logrus"
+	"path"
 	"strings"
 
 	"path/filepath"
@@ -20,6 +21,17 @@ var (
 //TODO Test Files
 //TODO Comment
 
+func formatTitle(oldTitile string) (newTitle string){
+
+	//Formatting the string
+	newTitle = strings.ReplaceAll(oldTitile, " ", "_")
+	newTitle = strings.ReplaceAll(newTitle, "!", "")
+	newTitle = strings.ReplaceAll(newTitle, ":", "")
+	newTitle = strings.ReplaceAll(newTitle, ",", "")
+
+	return
+}
+
 func createCrawlFile(animePage commonresources.AnimePageStruct, crawlPath string, jdownloadPath string) (err error) {
 	jdownloaderLog.WithFields(logrus.Fields{
 		"Anime": animePage,
@@ -30,10 +42,7 @@ func createCrawlFile(animePage commonresources.AnimePageStruct, crawlPath string
 	fileContent := ""
 
 	//Formatting the string
-	formattedAnimeTitle := strings.ReplaceAll(animePage.Title, " ", "_")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, "!", "")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, ":", "")
-	formattedAnimeTitle = strings.ReplaceAll(formattedAnimeTitle, ",", "")
+	formattedAnimeTitle := formatTitle(animePage.Title)
 
 	//Creating the AnimeDir
 	animeDir := filepath.Join(jdownloadPath, formattedAnimeTitle)
@@ -68,6 +77,11 @@ func SendToJDownloader(animePageList []commonresources.AnimePageStruct, crawlPat
 		"Download Path" : jdownloadPath,
 	}).Trace("<SendToJDownloader>")
 
+	if len(animePageList)>1 {
+		formattedTitle := formatTitle(animePageList[0].Title)
+		jdownloadPath = path.Join(jdownloadPath,formattedTitle)
+		jdownloaderLog.WithField("New Path",jdownloadPath).Debug("Multiple Seasons detected, updating download path")
+	}
 	for _, animePage := range animePageList {
 		jdownloaderLog.WithField("Anime",animePage).Debug("Creating file for Anime")
 		err = createCrawlFile(animePage, crawlPath, jdownloadPath)
