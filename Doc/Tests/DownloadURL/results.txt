@@ -1,0 +1,10 @@
+18/02/20202 - 30s
+
+goos: darwin
+goarch: amd64
+pkg: AnimeunityCLI/packages/downloadurl
+BenchmarkDownloadURLALL-8     	       1	3830182605 ns/op
+BenchmarkDownloadURLNO-8      	       3	 377183448 ns/op
+BenchmarkDownloadURLOVA-8     	       2	 517339620 ns/op
+BenchmarkDownloadURLNOOVA-8   	       1	2733145078 ns/op
+PASS

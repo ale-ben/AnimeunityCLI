@@ -80,10 +80,11 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) (anim
 		downloadURLLog.WithField("Updated Anime", animePageList[i]).Debug("Updating Anime Info")
 	}
 
+	downloadURLLog.WithField("Ova",animePageList[0].IsOVA).Error("OVA")
+
 	//For each anime page launch the scraper and scrape for episodes URLs
 	for i := 0; i < len(animePageList); i++ {
-		scraper.EpisodeScraper(&(animePageList[i]))
-		downloadURLLog.WithField("Anime", animePageList[i]).Info("Episode Scraping Completed")
+		downloadParallAux(&animePageList[i]) //TODO: Fix
 	}
 
 	downloadURLLog.WithFields(logrus.Fields{
@@ -91,6 +92,13 @@ func DownloadURL(animePage commonresources.AnimePageStruct, season string) (anim
 		"Season":    season,
 	}).Trace("</DownloadURL>")
 	return animePageList
+}
+
+func downloadParallAux(animePage *commonresources.AnimePageStruct) {
+	downloadURLLog.WithField("Anime", *animePage).Trace("<downloadParallAux>")
+	scraper.EpisodeScraper(animePage)
+	downloadURLLog.WithField("Anime", *animePage).Info("Episode Scraping Completed")
+	downloadURLLog.WithField("Anime", *animePage).Trace("</downloadParallAux>")
 }
 
 // SetLogLevel Sets the log level

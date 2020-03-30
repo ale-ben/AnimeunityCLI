@@ -63,6 +63,12 @@ func SetLogLevel(log *logrus.Logger, logLevel string,file string) {
 		}).Debug("Log Level Set")
 }
 
+// SetLogLevel Sets own log level
+func SetOwnLogLevel(logLevel string) {
+	SetLogLevel(log, logLevel)
+}
+
+
 /*
 PrintAnimeList is used to print a list of animeStruct.
 

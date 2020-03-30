@@ -3,11 +3,8 @@ package jdownloader
 import (
 	"AnimeunityCLI/packages/commonresources"
 	"github.com/sirupsen/logrus"
-<<<<<<< HEAD
 	"path"
-=======
 	"strconv"
->>>>>>> master
 	"strings"
 
 	"path/filepath"
@@ -46,7 +43,7 @@ func createCrawlFile(animePage commonresources.AnimePageStruct, crawlPath string
 	fileContent := ""
 
 	//Formatting the string
-	formattedAnimeTitle := formatTitle(animePage.Title)
+	formattedAnimeTitle := "Season_" + strconv.Itoa(index)
 
 	//Creating the AnimeDir
 	animeDir := filepath.Join(jdownloadPath, "Season_" + strconv.Itoa(index))

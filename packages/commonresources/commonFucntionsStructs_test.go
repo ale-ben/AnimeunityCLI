@@ -26,6 +26,7 @@ var (
 				"https://www.animeunityserver21.cloud/DDL/Anime/HighSchoolDxD/HighSchoolDxD_Ep_01_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"666",
 			"https://animeunity.it/anime.php?id=666",
@@ -35,6 +36,7 @@ var (
 				"https://www.animeunityserver21.cloud/DDL/Anime/HighSchoolDxD/HighSchoolDxD_OAV_01_SUB_ITA.mp4",
 			},
 			true,
+			0,
 		}, {
 			"203",
 			"https://animeunity.it/anime.php?id=203",
@@ -55,6 +57,7 @@ var (
 				"https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDNew/HighSchoolDxDNew_Ep_01_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"205",
 			"https://animeunity.it/anime.php?id=205",
@@ -74,6 +77,7 @@ var (
 				"https://www.animeunityserver54.cloud/DDL/Anime/HighschoolDXDBorn/HighschoolDXDBorn_Ep_01_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"665",
 			"https://animeunity.it/anime.php?id=665",
@@ -82,6 +86,7 @@ var (
 				"https://www.animeunityserver54.cloud/DDL/Anime/HighschoolDXDBorn/HighSchoolDxDBorN_OAV_01_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"667",
 			"https://animeunity.it/anime.php?id=667",
@@ -90,6 +95,7 @@ var (
 				"https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDNew/HighSchoolDxDNew_OAV_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"208",
 			"https://animeunity.it/anime.php?id=208",
@@ -110,6 +116,7 @@ var (
 				"https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDHero/HighSchoolDxDHero_Ep_00_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		},
 	}
 
@@ -133,6 +140,7 @@ var (
 				"https://www.animeunityserver21.cloud/DDL/Anime/HighSchoolDxD/HighSchoolDxD_Ep_01_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"666",
 			"https://animeunity.it/anime.php?id=666",
@@ -142,6 +150,7 @@ var (
 				"https://www.animeunityserver21.cloud/DDL/Anime/HighSchoolDxD/HighSchoolDxD_OAV_01_SUB_ITA.mp4",
 			},
 			true,
+			0,
 		}, {
 			"203",
 			"https://animeunity.it/anime.php?id=203",
@@ -161,6 +170,7 @@ var (
 				"https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDNew/HighSchoolDxDNew_Ep_01_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"205",
 			"https://animeunity.it/anime.php?id=205",
@@ -180,6 +190,7 @@ var (
 				"https://www.animeunityserver54.cloud/DDL/Anime/HighschoolDXDBorn/HighschoolDXDBorn_Ep_01_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"665",
 			"https://animeunity.it/anime.php?id=665",
@@ -188,6 +199,7 @@ var (
 				"https://www.animeunityserver54.cloud/DDL/Anime/HighschoolDXDBorn/HighSchoolDxDBorN_OAV_01_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"667",
 			"https://animeunity.it/anime.php?id=667",
@@ -196,6 +208,7 @@ var (
 				"https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDNew/HighSchoolDxDNew_OAV_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		}, {
 			"208",
 			"https://animeunity.it/anime.php?id=208",
@@ -216,6 +229,7 @@ var (
 				"https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDHero/HighSchoolDxDHero_Ep_00_SUB_ITA.mp4",
 			},
 			false,
+			0,
 		},
 	}
 )

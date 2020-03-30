@@ -1,0 +1,13 @@
+18/02/2020
+
+goos: darwin
+goarch: amd64
+pkg: AnimeunityCLI/packages/commonresources
+BenchmarkUnique-8   	   93994	     12617 ns/op
+PASS
+
+goos: darwin
+goarch: amd64
+pkg: AnimeunityCLI/packages/commonresources
+BenchmarkSort-8   	    1159	    971351 ns/op
+PASS

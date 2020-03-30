@@ -1,0 +1,8 @@
+18/02/2020
+
+goos: darwin
+goarch: amd64
+pkg: AnimeunityCLI/packages/getinfo
+BenchmarkGetInfoDxD-8   	       6	 177492869 ns/op
+BenchmarkGetInfoPL-8    	       8	 153248228 ns/op
+PASS

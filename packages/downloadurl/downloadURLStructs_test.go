@@ -5,7 +5,7 @@ import "AnimeunityCLI/packages/commonresources"
 var (
 	testCases = []Test{
 		{
-			commonresources.AnimePageStruct{"200", "https://animeunity.it/anime.php?id=200", "", nil, false},
+			commonresources.AnimePageStruct{"200", "https://animeunity.it/anime.php?id=200", "", nil, false,2000},
 			commonresources.AnimePageStruct{
 				"200",
 				"https://animeunity.it/anime.php?id=200",
@@ -26,10 +26,11 @@ var (
 					"https://www.animeunityserver21.cloud/DDL/Anime/HighSchoolDxD/HighSchoolDxD_Ep_01_SUB_ITA.mp4",
 				},
 				false,
+				2000,
 			},
 		},
 		{
-			commonresources.AnimePageStruct{"666", "https://animeunity.it/anime.php?id=666", "", nil, true},
+			commonresources.AnimePageStruct{"666", "https://animeunity.it/anime.php?id=666", "", nil, true,2000},
 			commonresources.AnimePageStruct{
 				"666",
 				"https://animeunity.it/anime.php?id=666",
@@ -40,10 +41,11 @@ var (
 					"https://www.animeunityserver21.cloud/DDL/Anime/HighSchoolDxD/HighSchoolDxD_OAV_01_SUB_ITA.mp4",
 				},
 				true,
+				2000,
 			},
 		},
 		{
-			commonresources.AnimePageStruct{"203", "https://animeunity.it/anime.php?id=203", "", nil, false},
+			commonresources.AnimePageStruct{"203", "https://animeunity.it/anime.php?id=203", "", nil, false,2000},
 			commonresources.AnimePageStruct{
 				"203",
 				"https://animeunity.it/anime.php?id=203",
@@ -64,6 +66,7 @@ var (
 					"https://www.animeunityserver96.cloud/DDL/Anime/HighSchoolDxDNew/HighSchoolDxDNew_Ep_01_SUB_ITA.mp4",
 				},
 				false,
+				2000,
 			},
 		},
 	}

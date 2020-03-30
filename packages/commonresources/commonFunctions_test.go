@@ -12,3 +12,18 @@ func TestUnique(t *testing.T) {
 }
 
 //TODO: TestSort
+func BenchmarkUnique(b *testing.B) {
+	// run the DownloadURL function b.N times
+	for n := 0; n < b.N; n++ {
+		commonresources.SetOwnLogLevel("warn")
+		commonresources.Unique(original)
+	}
+}
+
+func BenchmarkSort(b *testing.B) {
+	// run the DownloadURL function b.N times
+	for n := 0; n < b.N; n++ {
+		commonresources.SetOwnLogLevel("warn")
+		commonresources.Sort(original)
+	}
+}

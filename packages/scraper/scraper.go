@@ -39,7 +39,7 @@ func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
 	// Allow visiting the same page multiple times
 	//colly.AllowURLRevisit(),
 	// Allow crawling to be done in parallel / async
-	//colly.Async(true),
+	colly.Async(true),
 	//colly.Debugger(&debug.LogDebugger{}),
 	)
 
@@ -93,6 +93,7 @@ func ScrapeInfo(keyword string, animeList *[]commonresources.AnimeStruct) {
 		scraperLog.WithField("Error", err).Error("Error in scraper")
 	}
 
+	c.Wait()
 	scraperLog.WithFields(logrus.Fields{
 		"Keyword" : keyword,
 		"Anime" : *animeList,
@@ -115,7 +116,7 @@ func SeasonScraper(baseURL string, season string, animePageList *[]commonresourc
 		// Allow visiting the same page multiple times
 		//colly.AllowURLRevisit(),
 		// Allow crawling to be done in parallel / async
-		//colly.Async(true),
+		colly.Async(true),
 	)
 
 	// Get Seasons
@@ -135,6 +136,9 @@ func SeasonScraper(baseURL string, season string, animePageList *[]commonresourc
 				}).Debug("Season Found")
 				if (season == "ova" && isOVA) || (season == "noova" && !isOVA) || (season == "all") || ((season == "no") && (baseURL == "https://animeunity.it/anime.php?id=" + seasonID)){
 					requested = true
+				}
+				if (season == "no") && (baseURL != "https://animeunity.it/anime.php?ep="+seasonID) {
+					requested = false
 				}
 				if requested {
 					animePage := commonresources.AnimePageStruct{AnimeID: seasonID, Title: seasonTitle, EpisodeList: []string{}, IsOVA: isOVA, Year: year}
@@ -158,6 +162,7 @@ func SeasonScraper(baseURL string, season string, animePageList *[]commonresourc
 
 	c.Visit(baseURL)
 
+	c.Wait()
 	scraperLog.WithFields(logrus.Fields{
 		"Base URL" : baseURL,
 		"Season" : season,
@@ -175,7 +180,7 @@ func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
 		// Allow visiting the same page multiple times
 		//colly.AllowURLRevisit(),
 		// Allow crawling to be done in parallel / async
-		//colly.Async(true),
+		colly.Async(true),
 	)
 
 	// Get Title
@@ -220,9 +225,12 @@ func EpisodeScraper(animePage *commonresources.AnimePageStruct) {
 		Delay: 500 * time.Millisecond,
 		// Add an additional random delay
 		RandomDelay: 1 * time.Second,
+		Parallelism: 10,
 	})
 
 	c.Visit((*animePage).AnimeURL)
+	// Wait until threads are finished
+	c.Wait()
 	scraperLog.WithField("Anime",*animePage).Trace("</EpisodeScraper>")
 }
 
